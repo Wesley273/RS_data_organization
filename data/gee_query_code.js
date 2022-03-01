@@ -1,5 +1,5 @@
 /*
-    Test this code in https://code.earthengine.google.com/
+    This code is used to get MODIS products via https://code.earthengine.google.com/
 */
 
 Map.addLayer(table, {}, "Tibetan")// show the mask on google map
