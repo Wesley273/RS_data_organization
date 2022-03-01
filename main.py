@@ -1,6 +1,6 @@
 import rasterio
 
-with rasterio.open(r'MOD10A1_Tibetan\NDSI_2021_06_01.tif') as ds:
+with rasterio.open(r'C:\Users\Wesley\Downloads\1.tif') as ds:
     print('该栅格数据的基本数据集信息（这些信息都是以数据集属性的形式表示的）：')
     print(f'数据格式：{ds.driver}')
     print(f'波段数目：{ds.count}')
@@ -23,5 +23,5 @@ with rasterio.open(r'MOD10A1_Tibetan\NDSI_2021_06_01.tif') as ds:
     x, y = ds.xy(row, col)  # 中心点的坐标
     print(f'行列号({row}, {col})对应的中心投影坐标是({x}, {y})')
     # 那么如何得到对应点左上角的信息
-    x, y = (row, col) * ds.transform
+    x, y =  ds.transform*(row, col) 
     print(f'行列号({row}, {col})对应的左上角投影坐标是({x}, {y})')
