@@ -23,5 +23,5 @@ with rasterio.open(r'data\cloud_free\NDSI_2021_02_01.tif') as ds:
     x, y = ds.xy(row, col)  # 中心点的坐标
     print(f'行列号({row}, {col})对应的中心投影坐标是({x}, {y})')
     # 那么如何得到对应点左上角的信息
-    x, y =  ds.transform*(row, col) 
+    x, y = ds.transform*(row, col)
     print(f'行列号({row}, {col})对应的左上角投影坐标是({x}, {y})')
