@@ -1,4 +1,3 @@
-
 import happybase
 
 # remenber to run'hbase thrift -p 9090 start' in cmd
