@@ -42,6 +42,7 @@ def rot(n, x, y, rx, ry):
 
 
 if __name__ == "__main__":
+    # test here
     n = 4
     for y in range(0, n):
         for x in range(0, n):

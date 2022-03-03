@@ -34,6 +34,7 @@ def get_distance(lon1, lat1, lon2, lat2):
 
 
 if __name__ == "__main__":
+    # some tests
     print(get_distance(110, 40, 120, 43))
     print(xy2lonlat(-3043700.0, 5187700.0))
     print(lonlat2xy(70.52826039493459, 39.020410447061074))
