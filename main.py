@@ -1,8 +1,9 @@
 import rasterio
+import indexing.geo_points
 
 
 def basic_test():
-    with rasterio.open(r'data\cloud_free\NDSI_2021_02_01.tif') as ds:
+    with rasterio.open(r'data\cloud_free\NDSI_2022_01_18.tif') as ds:
         print('该栅格数据的基本数据集信息(这些信息都是以数据集属性的形式表示的):')
         print(f'数据格式:{ds.driver}')
         print(f'波段数目:{ds.count}')
@@ -41,3 +42,5 @@ def basic_test():
 
 if __name__ == "__main__":
     basic_test()
+    table = indexing.geo_points.generate_pois(rasterio.open(r'data\cloud_free\NDSI_2021_02_01.tif').read(1))
+    # print(table[1])

@@ -50,4 +50,3 @@ if __name__ == "__main__":
                 print('%3d ' % xy2d(n, x, y))
             else:
                 print('%3d ' % xy2d(n, x, y), end='')
-    print(d2xy(n, 15))
