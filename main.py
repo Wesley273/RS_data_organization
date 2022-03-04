@@ -2,13 +2,10 @@ import rasterio
 import indexing.geo_points
 
 
-def basic_test():
+def basic_test(row: int, col: int):
     with rasterio.open(r'data\cloud_free\NDSI_2022_01_18.tif') as ds:
-        print('该栅格数据的基本数据集信息(这些信息都是以数据集属性的形式表示的):')
-        print(f'数据格式:{ds.driver}')
         print(f'波段数目:{ds.count}')
-        print(f'影像宽度:{ds.width}')
-        print(f'影像高度:{ds.height}')
+        print(f'影像尺寸:{ds.width}×{ds.height}')
         print(f'地理坐标范围:{ds.bounds}')
         print(f'反射变换参数(六参数模型):\n {ds.transform}')
         print(f'投影定义:{ds.crs}')
@@ -20,27 +17,22 @@ def basic_test():
         print(f'第一波段的平均值:{band1.mean()}')
         # 注意矩阵的第一维为图像的y轴
         # 观察点之间的坐标关系
-        row = 7
-        col = 7
-        x, y = (row, col)*ds.transform
-        print(f'行列号({row}, {col})对应的左上角投影坐标是({x}, {y})')
-        x, y = ds.xy(row, col)  # 中心点的坐标
-        print(f'行列号({row}, {col})对应的中心投影坐标是({x}, {y})')
+        x, y = ds.transform*(row, col)
+        print(f'行列号({row}, {col})对应的投影坐标是({x}, {y})')
         row += 1
         col = col
-        x, y = (row, col)*ds.transform
-        print(f'行列号({row}, {col})对应的左上角投影坐标是({x}, {y})')
-        x, y = ds.xy(row, col)  # 中心点的坐标
-        print(f'行列号({row}, {col})对应的中心投影坐标是({x}, {y})')
+        x, y = ds.transform*(row, col)
+        print(f'行列号({row}, {col})对应的投影坐标是({x}, {y})')
         row = row
         col += 1
-        x, y = (row, col)*ds.transform
-        print(f'行列号({row}, {col})对应的左上角投影坐标是({x}, {y})')
-        x, y = ds.xy(row, col)  # 中心点的坐标
-        print(f'行列号({row}, {col})对应的中心投影坐标是({x}, {y})')
+        x, y = ds.transform*(row, col)
+        print(f'行列号({row}, {col})对应的投影坐标是({x}, {y})')
 
 
 if __name__ == "__main__":
-    basic_test()
-    table = indexing.geo_points.generate_pois(rasterio.open(r'data\cloud_free\NDSI_2021_02_01.tif').read(1))
-    # print(table[1])
+    row = 761
+    col = 568
+    basic_test(row, col)
+    poi = indexing.geo_points.POI(20190101, row, col, "name", 90, "comment")
+    print(poi.lon, poi.lat)
+    print(poi.get_geoxy())
