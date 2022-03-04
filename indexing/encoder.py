@@ -1,5 +1,8 @@
-# convert (x,y) to d
+
 def xy2d(n, x, y):
+    """
+     convert (x,y) to d
+    """
     rx = ry = d = 0
     s = n//2
     while s > 0:
@@ -11,8 +14,10 @@ def xy2d(n, x, y):
     return d
 
 
-# convert d to (x,y)
 def d2xy(n, d):
+    """
+     convert d to (x,y)
+    """
     rx = ry = t = d
     x = y = 0
     s = 1
@@ -26,10 +31,11 @@ def d2xy(n, d):
         s *= 2
     return x, y
 
-# rotate/flip a quadrant appropriately
-
 
 def rot(n, x, y, rx, ry):
+    """
+    rotate/flip a quadrant appropriately
+    """
     if (ry == 0):
         if (rx == 1):
             x = n - 1 - x
@@ -39,14 +45,3 @@ def rot(n, x, y, rx, ry):
         x = y
         y = temp
     return x, y
-
-
-if __name__ == "__main__":
-    # test here
-    n = 4
-    for y in range(0, n):
-        for x in range(0, n):
-            if x == n-1:
-                print('%3d ' % xy2d(n, x, y))
-            else:
-                print('%3d ' % xy2d(n, x, y), end='')

@@ -38,13 +38,3 @@ def get_distance(lon1, lat1, lon2, lat2):
     # the average radius of the Earth
     r = 6371.393
     return c * r * 1000
-
-
-if __name__ == "__main__":
-    # some tests
-    print(xy2lonlat(-3014000.0, 5158000.0))
-    print(xy2lonlat(-3010000.0, 5158000.0))
-    lon1, lat1 = xy2lonlat(-8000.0, 5158000.0)
-    lon2, lat2 = xy2lonlat(-4000.0, 5158000.0)
-    print("Use equation: ", get_distance(lon1, lat1, lon2, lat2))
-    print("Use geopy: ", get_precise_distance(lon1, lat1, lon2, lat2))
