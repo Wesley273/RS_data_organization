@@ -17,7 +17,7 @@ def lonlat2xy(lon, lat):
     return x, y
 
 
-def precise_distance(lon1, lat1, lon2, lat2):
+def get_precise_distance(lon1, lat1, lon2, lat2):
 
     return geodesic((lat1, lon1), (lat2, lon2)).m
 
@@ -47,4 +47,4 @@ if __name__ == "__main__":
     lon1, lat1 = xy2lonlat(-8000.0, 5158000.0)
     lon2, lat2 = xy2lonlat(-4000.0, 5158000.0)
     print("Use equation: ",get_distance(lon1, lat1, lon2, lat2))
-    print("Use geopy: ",precise_distance(lon1, lat1, lon2, lat2))
+    print("Use geopy: ",get_precise_distance(lon1, lat1, lon2, lat2))
