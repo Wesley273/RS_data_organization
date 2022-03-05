@@ -13,11 +13,11 @@ class MyElastic:
     def get_info(self):
         return(self.__client.info())
 
-    def create_index(self, __index_name='test'):
+    def create_index(self, index_name='test'):
         '''
         Create an index and its mapping
         '''
-        self._index_mappings = {
+        self.__index_mappings = {
             "settings": {
                 "number_of_shards": 2,
                 "number_of_replicas": 0,
@@ -37,8 +37,8 @@ class MyElastic:
                 }
             }
         }
-        if self.__client.indices.exists(index=__index_name) is not True:
-            result = self.__client.indices.create(index=__index_name, body=self._index_mappings)
+        if self.__client.indices.exists(index=index_name) is not True:
+            result = self.__client.indices.create(index=index_name, body=self.__index_mappings)
             print(result)
 
     def full_text_query(self, index_name: str, field: str, search_term):
@@ -57,9 +57,6 @@ class MyElastic:
         query = {
             "query": {
                 "bool": {
-                    "must": {
-                        "match_all": {}
-                    },
                     "filter": {
                         "geo_distance": {
                             "distance": radius,
@@ -94,4 +91,4 @@ class MyElastic:
 
         # 批量处理
         success, _ = bulk(self.__client, actions, index=index_name, raise_on_error=True)
-        print('Successfully Performed %d actions' % success)
+        print('Successfully added %d docs' % success)

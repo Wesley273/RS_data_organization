@@ -2,8 +2,8 @@ from database.my_elastic import MyElastic
 
 if __name__ == "__main__":
     es = MyElastic()
-    print(es.get_info())
-    es.create_index('test')
+    #print(es.get_info())
+    #es.create_index('test')
     doc_list = [{
         "_id": 1,
         "building_name": "上海站",
@@ -23,5 +23,5 @@ if __name__ == "__main__":
 
     }]
     es.bulk_index_docs('test', doc_list)
-    es.arc_query("test", 121.462311, 31.256224, '600m')
-    es.full_text_query("test", "building_name", "大厦")
+    es.arc_query("test", 121.462311, 31.256224, '200m')
+    es.full_text_query("test", "building_name", "公园")
