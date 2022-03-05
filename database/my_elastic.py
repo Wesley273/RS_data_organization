@@ -6,7 +6,6 @@ from elasticsearch.helpers import bulk
 
 class MyElastic:
     __address = "http://localhost:9200"
-    __index_name = "test-index"
 
     def __init__(self):
         self.__client = Elasticsearch(self.__address)
@@ -21,19 +20,16 @@ class MyElastic:
         self._index_mappings = {
             "settings": {
                 "number_of_shards": 2,
-                "number_of_replicas": 2,
+                "number_of_replicas": 0,
                 "analysis": {
-                    "analyzer": {
-                        "default": {
-                            "type": "ik_max_word"
-                        }
-                    }
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_smart"
                 }
             },
             "mappings": {
                 "properties": {
                     "building_name": {
-                        "type": "keyword"
+                        "type": "text"
                     },
                     "location": {
                         "type": "geo_point"
@@ -45,36 +41,57 @@ class MyElastic:
             result = self.__client.indices.create(index=__index_name, body=self._index_mappings)
             print(result)
 
-    def index_doc(self, index_name, doc):
-        actions = []
-        actions.append({
-            "_index": index_name,
-            "_id": 1,
-            "_source": {
-                "building_name": doc['building_name'],
-                "location": doc['location']
+    def full_text_query(self, index_name: str, field: str, search_term):
+        query = {
+            "query": {
+                "match": {
+                    field: search_term
+                }
             }
-        })
-        # 批量处理
-        success, _ = bulk(self.__client, actions, index=index_name, raise_on_error=True)
-        print('Successfully Performed %d actions' % success)
+        }
+        result = self.__client.search(index=index_name, body=query)
+        for hit in result['hits']['hits']:
+            print(hit['_source']['building_name'])
+
+    def arc_query(self, index_name: str, lon: float, lat: float, radius: str):
+        query = {
+            "query": {
+                "bool": {
+                    "must": {
+                        "match_all": {}
+                    },
+                    "filter": {
+                        "geo_distance": {
+                            "distance": radius,
+                            "distance_type": "arc",
+                            "_name": "optional_name",
+                            "location": {
+                                "lat": lat,
+                                "lon": lon
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        result = self.__client.search(index=index_name, body=query)
+        for hit in result['hits']['hits']:
+            print(hit['_source']['building_name'])
 
     def bulk_index_docs(self, index_name, doc_list):
-        '''
-        用bulk将批量数据存储到es
-        '''
         actions = []
+        i = 1
         for doc in doc_list:
             actions.append({
                 "_index": index_name,
-                "_id": doc['code'],
+                "_id": i,
                 "_source": {
-                    "date": doc['date'],
-                    "source": doc['source'],
-                    "link": doc['link'],
-                    "keyword": doc['keyword'],
-                    "title": doc['title']}
+                    "building_name": doc['building_name'],
+                    "location": doc['location']
+                }
             })
-            # 批量处理
+            i += 1
+
+        # 批量处理
         success, _ = bulk(self.__client, actions, index=index_name, raise_on_error=True)
         print('Successfully Performed %d actions' % success)
