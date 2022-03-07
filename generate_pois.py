@@ -18,7 +18,9 @@ def gen_comment():
     return fake.name()+"负责,地址与联系方式: "+fake.address()+"; "+fake.email()+"; "+fake.phone_number()
 
 
-def probability(p: float):  # probability=p%
+def probability(p: float, pixel: int):  # probability=p%
+    if (pixel == 0):
+        return False
     if (random.random()*100 <= p):
         return True
     else:
@@ -29,7 +31,7 @@ def gen_pois(csv_writer, img_array, date: int):
     points = []
     for row in range(len(img_array)):
         for col in range(len(img_array[row])):
-            if(probability(0.03)):
+            if(probability(0.05, img_array[row][col])):
                 poi = POI(date, row, col, gen_name(), img_array[row][col], gen_comment())
                 points.append(poi)
                 csv_writer.writerow([poi.code, poi.date, poi.name, poi.lon, poi.lat, row, col, poi.cover_rate, poi.comment])
@@ -40,7 +42,7 @@ def gen_pois(csv_writer, img_array, date: int):
 if __name__ == "__main__":
     begin = datetime.date(2021, 2, 4)
     end = datetime.date(2021, 2, 5)
-    file = open(r'data\poi\test.csv', 'a+', encoding='utf-8-sig', newline='')
+    file = open(r'data\poi\Sanjiangyuan.csv', 'a+', encoding='utf-8-sig', newline='')
     csv_writer = csv.writer(file)
     csv_writer.writerow(["code", "date", "name", "lon", "lat", "row", "col", "cover_rate", "comment"])
     # Traverse and sample daily remote sensing images

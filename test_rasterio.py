@@ -35,4 +35,7 @@ if __name__ == "__main__":
     col = 568
     basic_test(row, col)
     poi = indexing.geo_points.POI(20190228, row, col, "name", 90, "comment")
-    print(str(poi.date).replace("-", "_", 2))
+    print(poi.lon, poi.lat)
+    print('三江源中心点:', poi.get_rowcol(95.5, 33.5))
+    print('三江源最西南点:', poi.get_rowcol(90, 32))
+    print('三江源最东北点:', poi.get_rowcol(102, 36))

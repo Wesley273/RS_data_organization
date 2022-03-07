@@ -1,4 +1,60 @@
+import csv
+import datetime
+import random
 from turtle import *
+
+import pylab
+import rasterio
+from numpy import mean
+from PIL import Image
+
+
+class SanJiangYuanAnalyzer:
+    begin = datetime.date(2021, 2, 1)
+    end = datetime.date(2022, 2, 1)
+    file = open(r'data\poi\Sanjiangyuan.csv', 'w', encoding='utf-8-sig', newline='')
+    csv_writer = csv.writer(file)
+
+    def __init__(self):
+        self.csv_writer.writerow(["date", "cover_rate"])
+        # Traverse and sample daily remote sensing images
+        for i in range((self.end - self.begin).days):
+            day = self.begin + datetime.timedelta(days=i)
+            print(f"对 {day} 日图像采样····· ")
+            ds = rasterio.open(f'data\\img\\NDSI_{str(day).replace("-", "_", 2)}.tif')
+            img_array = ds.read(1)
+            img_slice = img_array[385:682, 291:361]
+            self.csv_writer.writerow([day, mean(img_slice)])
+            print(f" {day} 日积雪率为:{mean(img_slice)}")
+
+
+class Sampler:
+
+    def __init__(self, img_array):
+        self.img_array = img_array
+        self.show_pois()
+
+    def show_pois(self):
+        self.image = Image.fromarray(self.img_array, mode='L').convert('RGB')
+        print(self.image.size)
+        x = []
+        y = []
+        for row in range(self.image.size[0]):
+            for col in range(self.image.size[1]):
+                if(self.probability(0.05, self.img_array[col][row])):
+                    x.append(row)
+                    y.append(col)
+        pylab.imshow(self.image)
+        pylab.plot(x, y, 'r*')
+        pylab.show()
+
+    def probability(self, p: float, pixel: int):  # probability=p%
+        if (pixel == 0):
+            return False
+        if (random.random()*100 <= p):
+            return True
+        else:
+            return False
 
 
 class HilbertCurver:
@@ -53,4 +109,11 @@ class HilbertCurver:
 
 
 if __name__ == "__main__":
+    # show hilbert curve
     img = HilbertCurver(8)
+
+    # show pois
+    sample = Sampler(rasterio.open(r'data\img\NDSI_2021_02_19.tif').read(1))
+
+    # Statistics on the snow cover rate in the Sanjiangyuan area
+    #analyzer = SanJiangYuanAnalyzer()

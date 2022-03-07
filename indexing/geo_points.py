@@ -30,5 +30,11 @@ class POI:
     def get_rowcol(self):
         return self.__row, self.__col
 
+    def get_rowcol(self, lon, lat):
+        geo_x, geo_y = projection.lonlat2xy(lon, lat)
+        row = int((geo_x-self.__left_bound)/self.__cell)
+        col = -int((geo_y-self.__top_bound)/self.__cell)
+        return row, col
+
     def get_geoxy(self):
         return self.__geo_x, self.__geo_y
