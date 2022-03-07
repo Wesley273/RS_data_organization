@@ -31,6 +31,12 @@ class MyElastic:
                     "building_name": {
                         "type": "text"
                     },
+                    "date": {
+                        "type": "text"
+                    },
+                    "cover_rate":{
+                        "type":"integer"
+                    },
                     "location": {
                         "type": "geo_point"
                     }

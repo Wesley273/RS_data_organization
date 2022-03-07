@@ -3,7 +3,7 @@ import indexing.geo_points
 
 
 def basic_test(row: int, col: int):
-    with rasterio.open(r'data\cloud_free\NDSI_2022_01_18.tif') as ds:
+    with rasterio.open(r'data\img\NDSI_2022_01_18.tif') as ds:
         print(f'波段数目:{ds.count}')
         print(f'影像尺寸:{ds.width}×{ds.height}')
         print(f'地理坐标范围:{ds.bounds}')
@@ -33,6 +33,5 @@ if __name__ == "__main__":
     row = 761
     col = 568
     basic_test(row, col)
-    poi = indexing.geo_points.POI(20190101, row, col, "name", 90, "comment")
-    print(poi.lon, poi.lat)
-    print(poi.get_geoxy())
+    poi = indexing.geo_points.POI(20190228, row, col, "name", 90, "comment")
+    print(poi.date)

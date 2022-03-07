@@ -1,12 +1,15 @@
 from database.my_elastic import MyElastic
+from faker import Faker
 
 if __name__ == "__main__":
     es = MyElastic()
-    #print(es.get_info())
-    #es.create_index('test')
+    fake = Faker("zh_CN")
+    print(fake.city_name()+fake.first_name_male()+"科考站")
+    # print(es.get_info())
+    # es.create_index('test')
     doc_list = [{
         "_id": 1,
-        "building_name": "上海站",
+        "building_name": fake.city_name()+"站",
         "location": {"lat": 31.256224, "lon": 121.462311}
     }, {
         "_id": 2,
@@ -22,6 +25,6 @@ if __name__ == "__main__":
         "location": "POINT (121.448215 31.26229)"
 
     }]
-    es.bulk_index_docs('test', doc_list)
-    es.arc_query("test", 121.462311, 31.256224, '200m')
-    es.full_text_query("test", "building_name", "公园")
+    #es.bulk_index_docs('test', doc_list)
+    #es.arc_query("test", 121.462311, 31.256224, '200m')
+    #es.full_text_query("test", "building_name", "公园")
