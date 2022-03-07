@@ -17,12 +17,17 @@ class POI:
         self.name = name
         self.cover_rate = cover_rate
         self.comment = comment
+        self.__row = row
+        self.__col = col
 
     def get_date(self, date):
         day = date % 100
         month = ((date-day)//100) % 100
         year = (date-day-month*100) // 10000
         return datetime.date(year, month, day)
+
+    def get_rowcol(self):
+        return self.__row, self.__col
 
     def get_geoxy(self):
         return self.__geo_x, self.__geo_y

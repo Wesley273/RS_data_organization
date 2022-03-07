@@ -1,4 +1,3 @@
-
 def xy2d(n, x, y):
     """
      convert (x,y) to d
@@ -9,7 +8,7 @@ def xy2d(n, x, y):
         rx = (x & s) > 0
         ry = (y & s) > 0
         d += s * s * ((3 * rx) ^ ry)
-        x, y = rot(n, x, y, rx, ry)
+        x, y = __rot(n, x, y, rx, ry)
         s //= 2
     return d
 
@@ -24,7 +23,7 @@ def d2xy(n, d):
     while (s < n):
         rx = 1 & (t//2)
         ry = 1 & (t ^ rx)
-        x, y = rot(s, x, y, rx, ry)
+        x, y = __rot(s, x, y, rx, ry)
         x += s * rx
         y += s * ry
         t //= 4
@@ -32,7 +31,7 @@ def d2xy(n, d):
     return x, y
 
 
-def rot(n, x, y, rx, ry):
+def __rot(n, x, y, rx, ry):
     """
     rotate/flip a quadrant appropriately
     """

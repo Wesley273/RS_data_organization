@@ -1,3 +1,4 @@
+import datetime
 import rasterio
 import indexing.geo_points
 
@@ -34,4 +35,4 @@ if __name__ == "__main__":
     col = 568
     basic_test(row, col)
     poi = indexing.geo_points.POI(20190228, row, col, "name", 90, "comment")
-    print(poi.date)
+    print(str(poi.date).replace("-", "_", 2))
