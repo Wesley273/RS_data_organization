@@ -1,30 +1,40 @@
-from database.my_elastic import MyElastic
 from faker import Faker
+
+import generate_pois
+from database.my_elastic import MyElastic
+
+test_doc_list = [{
+    "code": 1213,
+    "name": generate_pois.gen_name(),
+    "date": "2020-01-02",
+    "cover_rate": 90,
+    "location": {"lat": 31.256224, "lon": 121.462311}
+}, {
+    "code": 2432,
+    "date": "2020-01-03",
+    "cover_rate": 90,
+    "name": generate_pois.gen_name(),
+    "location": "POINT (121.460186 31.251281)"
+}, {
+    "code": 3543,
+    "date": "2020-01-04",
+    "name": generate_pois.gen_name(),
+    "cover_rate": 90,
+    "location": "POINT (121.473939 31.253531)"
+}, {
+    "code": 3244,
+    "date": "2020-01-05",
+    "name": generate_pois.gen_name(),
+    "cover_rate": 90,
+    "location": "POINT (121.448215 31.26229)"
+
+}]
 
 if __name__ == "__main__":
     es = MyElastic()
     fake = Faker("zh_CN")
-    print(fake.city_name()+fake.first_name_male()+"科考站")
-    # print(es.get_info())
-    # es.create_index('test')
-    doc_list = [{
-        "_id": 1,
-        "building_name": fake.city_name()+"站",
-        "location": {"lat": 31.256224, "lon": 121.462311}
-    }, {
-        "_id": 2,
-        "building_name": "上海静安洲际酒店",
-        "location": "POINT (121.460186 31.251281)"
-    }, {
-        "_id": 3,
-        "building_name": "交通公园",
-        "location": "POINT (121.473939 31.253531)"
-    }, {
-        "_id": 4,
-        "building_name": "万业远景大厦",
-        "location": "POINT (121.448215 31.26229)"
-
-    }]
-    #es.bulk_index_docs('test', doc_list)
-    #es.arc_query("test", 121.462311, 31.256224, '200m')
-    #es.full_text_query("test", "building_name", "公园")
+    #print(es.get_info())
+    es.create_index('test')
+    #es.bulk_index_docs('test', test_doc_list)
+    #es.arc_query("test", 100, 32, '2000km')
+    #es.full_text_query("test", "name", "合山亮")

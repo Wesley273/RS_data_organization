@@ -28,14 +28,14 @@ class MyElastic:
             },
             "mappings": {
                 "properties": {
-                    "building_name": {
+                    "name": {
                         "type": "text"
                     },
                     "date": {
-                        "type": "text"
+                        "type": "date"
                     },
-                    "cover_rate":{
-                        "type":"integer"
+                    "cover_rate": {
+                        "type": "integer"
                     },
                     "location": {
                         "type": "geo_point"
@@ -57,7 +57,7 @@ class MyElastic:
         }
         result = self.__client.search(index=index_name, body=query)
         for hit in result['hits']['hits']:
-            print(hit['_source']['building_name'])
+            print(hit['_source']['name'])
 
     def arc_query(self, index_name: str, lon: float, lat: float, radius: str):
         query = {
@@ -79,22 +79,21 @@ class MyElastic:
         }
         result = self.__client.search(index=index_name, body=query)
         for hit in result['hits']['hits']:
-            print(hit['_source']['building_name'])
+            print(hit['_source']['name'])
 
     def bulk_index_docs(self, index_name, doc_list):
         actions = []
-        i = 1
         for doc in doc_list:
             actions.append({
                 "_index": index_name,
-                "_id": i,
+                "_id": doc['code'],
                 "_source": {
-                    "building_name": doc['building_name'],
+                    "name": doc['name'],
+                    "date": doc['date'],
+                    "cover_rate": doc['cover_rate'],
                     "location": doc['location']
                 }
             })
-            i += 1
-
         # 批量处理
         success, _ = bulk(self.__client, actions, index=index_name, raise_on_error=True)
         print('Successfully added %d docs' % success)

@@ -1,7 +1,8 @@
 import csv
 import datetime
 import random
-
+from database.my_elastic import MyElastic
+import pandas as pd
 import rasterio
 from faker import Faker
 
@@ -48,7 +49,23 @@ def gen_pois(begin: datetime.date, end: datetime.date):
     file.close()
 
 
+def save2es():
+    tables = pd.read_csv(r"data\poi\random_sample.csv")
+    doc_list = []
+    for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
+        doc_list.append({
+            "code": code,
+            "name": name,
+            "date": date,
+            "cover_rate": cover_rate,
+            "location": {"lat": lat, "lon": lon}
+        })
+    es = MyElastic()
+    es.bulk_index_docs('test', doc_list)
+
+
 if __name__ == "__main__":
-    begin = datetime.date(2021, 2, 5)
-    end = datetime.date(2021, 2, 6)
+    begin = datetime.date(2021, 2, 1)
+    end = datetime.date(2022, 2, 2)
     gen_pois(begin, end)
+    #save2es()
