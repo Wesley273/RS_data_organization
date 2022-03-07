@@ -1,4 +1,3 @@
-import datetime
 import rasterio
 import indexing.geo_points
 

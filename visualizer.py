@@ -25,7 +25,7 @@ class SanJiangYuanAnalyzer:
             img_array = ds.read(1)
             img_slice = img_array[385:682, 291:361]
             csv_writer.writerow([day, mean(img_slice)])
-            print(f" {day} 日积雪率为:{mean(img_slice)}")
+            print(f" {day} 日平均积雪率为:{mean(img_slice)}")
 
 
 class Sampler:
@@ -54,6 +54,7 @@ class Sampler:
             return True
         else:
             return False
+
 
 class HilbertCurver:
     # 步幅
