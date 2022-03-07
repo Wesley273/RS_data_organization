@@ -26,30 +26,29 @@ def probability(pixel: int):
         return False
 
 
-def gen_pois(csv_writer, img_array, date: int):
-    points = []
-    for row in range(len(img_array)):
-        for col in range(len(img_array[row])):
-            if(probability(img_array[row][col])):
-                poi = POI(date, row, col, gen_name(), img_array[row][col], gen_comment())
-                points.append(poi)
-                csv_writer.writerow([poi.code, poi.date, poi.name, poi.lon, poi.lat, row, col, poi.cover_rate, poi.comment])
-                #print("%2d " % (img_array[row][col]), end='')
-    return(points)
-
-
-if __name__ == "__main__":
-    begin = datetime.date(2021, 2, 4)
-    end = datetime.date(2021, 2, 5)
+def gen_pois(begin: datetime.date, end: datetime.date):
     file = open(r'data\poi\random_sample.csv', 'w', encoding='utf-8-sig', newline='')
     csv_writer = csv.writer(file)
     csv_writer.writerow(["code", "date", "name", "lon", "lat", "row", "col", "cover_rate", "comment"])
-    # Traverse and sample daily remote sensing images
-    for i in range((end - begin).days):
+    for i in range((end-begin).days):
+        points = []
         day = begin + datetime.timedelta(days=i)
         print(f"对 {day} 日图像采样····· ")
         ds = rasterio.open(f'data\\img\\NDSI_{str(day).replace("-", "_", 2)}.tif')
         img_array = ds.read(1)
-        points = gen_pois(csv_writer, img_array, int(str(day).replace("-", "", 2)))
+        for row in range(len(img_array)):
+            for col in range(len(img_array[row])):
+                if(probability(img_array[row][col])):
+                    date = int(str(day).replace("-", "", 2))
+                    poi = POI(date, row, col, gen_name(), img_array[row][col], gen_comment())
+                    points.append(poi)
+                    csv_writer.writerow([poi.code, poi.date, poi.name, poi.lon, poi.lat, row, col, poi.cover_rate, poi.comment])
+                    #print("%2d " % (img_array[row][col]), end='')
         print(f"{day} 所含点数: ", len(points))
     file.close()
+
+
+if __name__ == "__main__":
+    begin = datetime.date(2021, 2, 5)
+    end = datetime.date(2021, 2, 6)
+    gen_pois(begin, end)
