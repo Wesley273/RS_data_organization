@@ -112,7 +112,7 @@ if __name__ == "__main__":
     #img = HilbertCurver(8)
 
     # show pois
-    #sample = Sampler(rasterio.open(r'data\img\NDSI_2021_02_19.tif').read(1))
+    sample = Sampler(rasterio.open(r'data\img\NDSI_2021_02_19.tif').read(1))
 
     # Statistics on the snow cover rate in the Sanjiangyuan area
-    analyzer = SanJiangYuanAnalyzer()
+    #analyzer = SanJiangYuanAnalyzer()
