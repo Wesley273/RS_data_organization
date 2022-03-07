@@ -1,5 +1,6 @@
-from indexing import encoder, projection
 import datetime
+
+from indexing import encoder, projection
 
 
 class POI:
