@@ -1,11 +1,12 @@
 import csv
 import datetime
 import random
-from database.my_elastic import MyElastic
+
 import pandas as pd
 import rasterio
 from faker import Faker
 
+from database.my_elastic import MyElastic
 from indexing.geo_points import POI
 
 
@@ -68,4 +69,4 @@ if __name__ == "__main__":
     begin = datetime.date(2021, 2, 1)
     end = datetime.date(2022, 2, 2)
     gen_pois(begin, end)
-    #save2es()
+    # save2es()
