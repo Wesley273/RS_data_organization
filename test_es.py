@@ -1,3 +1,5 @@
+import datetime
+import random
 import time
 
 import generate_pois
@@ -32,24 +34,46 @@ test_doc_list = [{
 }]
 
 
-def arcquery_using_haversine(datequery_result, lon, lat, radius):  # radius:km
+def arcquery_using_haversine(datequery_result, lon, lat, radius, output: bool):  # radius:km
     result = []
+    if(output):
+        print("Haversine法结果如下:")
+    htime_start = time.time()
     for hit in datequery_result['hits']['hits']:
         lat1 = hit['_source']['location']['lat']
         lon1 = hit['_source']['location']['lon']
         if(indexing.projection.get_distance(lon, lat, lon1, lat1) <= radius):
             result.append(hit['_source'])
-    return result
+            if(output):
+                print(hit['_source'])
+    htime_end = time.time()
+    htime = 1000*(htime_end-htime_start)
+    return result, htime
 
 
-def cost_time(date: str, index_name: str, lon: float, lat: float, radius: int, count: int):  # radius:km
-    time_start = time.time()
+def random_parameter():
+    begin_day = datetime.date(2021, 1, 31)
+    date = str(begin_day + datetime.timedelta(random.randint(1, 365)))
+    radius = random.randint(5000, 6000)
+    lon = float(random.randint(77, 92))
+    lat = float(random.randint(21, 40))
+    return date, radius, lon, lat
+
+
+def cost_time(index_name: str,  count: int):  # radius:km
+    # Haversine法测试
+    htime = 0
+    arctime = 0
     for i in range(1, count+1):
-        # print(f'第{i}次测试')
+        date, radius, lon, lat = random_parameter()
         result = es.date_query(date, index_name, output=False)
-        arcquery_using_haversine(result, lon, lat, radius)
-    time_end = time.time()
-    return time_end-time_start
+        htime += result['took']
+        _, cost = arcquery_using_haversine(result, lon, lat, radius, output=False)
+        htime += cost
+    # arc_query法测试
+        result = es.arc_query(date, "test", lon, lat, str(radius)+"km", output=False)
+        arctime += result['took']
+    return htime/count, arctime/count
 
 
 if __name__ == "__main__":
@@ -62,13 +86,13 @@ if __name__ == "__main__":
     #es.bulk_index_docs('test', test_doc_list)
 
     # test arc_query
-    es.arc_query("2021-04-20", "test", 100, 32, '2000km', output=True)
+    #es.arc_query("2021-04-20", "test", 100, 32, '1000km', output=True)
 
     # test full_text_query
     #es.full_text_query("2021-04-01", "test", "name", "合山亮",output=True)
 
     # test date_query
-    es.date_query("2021-04-20", "test", output=True)
+    #print(es.date_query("2021-04-20", "test", output=True))
 
     # test the cost time of query based on Haversine method
-    #print(cost_time(date="2021-04-20", index_name="test", lon=100, lat=32, radius=2000, count=100)*10, "ms")
+    print(cost_time('test', 1))

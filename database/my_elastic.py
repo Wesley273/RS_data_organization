@@ -49,6 +49,7 @@ class MyElastic:
 
     def full_text_query(self, date: str, index_name: str, field: str, search_term, output: bool):
         query = {
+            "size": 1000,
             "query": {
                 "bool": {
                     "must": {"match": {"date": date}},
@@ -65,6 +66,7 @@ class MyElastic:
 
     def arc_query(self, date: str, index_name: str, lon, lat, radius: str, output: bool):
         query = {
+            "size": 1000,
             "query": {
                 "bool": {
                     "must": {"match": {"date": date}},
@@ -91,6 +93,7 @@ class MyElastic:
 
     def date_query(self, date: str, index_name: str, output: bool):
         query = {
+            "size": 1000,
             "query": {
                 "bool": {
                     "must": {"match": {"date": date}}
