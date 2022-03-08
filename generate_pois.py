@@ -61,12 +61,18 @@ def save2es():
             "cover_rate": cover_rate,
             "location": {"lat": lat, "lon": lon}
         })
-    es = MyElastic()
     es.bulk_index_docs('test', doc_list)
 
 
 if __name__ == "__main__":
+    # create the client and index
+    #es = MyElastic()
+    # es.create_index('test')
+
+    # generate pois randomly
     begin = datetime.date(2021, 2, 1)
-    end = datetime.date(2022, 2, 2)
+    end = datetime.date(2021, 2, 5)
     gen_pois(begin, end)
-    # save2es()
+
+    # save docs to elasticsearch
+    #save2es()

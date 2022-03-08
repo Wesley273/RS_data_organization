@@ -1,5 +1,3 @@
-from faker import Faker
-
 import generate_pois
 from database.my_elastic import MyElastic
 
@@ -32,9 +30,8 @@ test_doc_list = [{
 
 if __name__ == "__main__":
     es = MyElastic()
-    fake = Faker("zh_CN")
-    #print(es.get_info())
-    es.create_index('test')
+    # print(es.get_info())
+    # es.create_index('test')
     #es.bulk_index_docs('test', test_doc_list)
-    #es.arc_query("test", 100, 32, '2000km')
-    #es.full_text_query("test", "name", "合山亮")
+    es.arc_query("test", 100, 32, '2000km')
+    es.full_text_query("test", "name", "合山亮")

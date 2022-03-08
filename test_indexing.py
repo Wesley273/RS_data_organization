@@ -1,5 +1,12 @@
 import rasterio
+
+import indexing.encoder
 import indexing.geo_points
+
+
+def test_encoder(x, y):
+    n = 2**18
+    print(indexing.encoder.xy2d(n, x, y))
 
 
 def basic_test(row: int, col: int):
@@ -34,7 +41,4 @@ if __name__ == "__main__":
     col = 568
     basic_test(row, col)
     poi = indexing.geo_points.POI(20190228, row, col, "name", 90, "comment")
-    print(poi.lon, poi.lat)
-    print('三江源中心点:', poi.get_rowcol(95.5, 33.5))
-    print('三江源最西南点:', poi.get_rowcol(90, 32))
-    print('三江源最东北点:', poi.get_rowcol(102, 36))
+    test_encoder(28,302)

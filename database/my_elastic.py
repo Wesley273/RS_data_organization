@@ -56,6 +56,7 @@ class MyElastic:
             }
         }
         result = self.__client.search(index=index_name, body=query)
+        print('全文搜索完成,耗时: ', result['took'], 'ms, 结果如下:')
         for hit in result['hits']['hits']:
             print(hit['_source']['name'])
 
@@ -78,6 +79,7 @@ class MyElastic:
             }
         }
         result = self.__client.search(index=index_name, body=query)
+        print('全文搜索完成,耗时: ', result['took'], 'ms, 结果如下:')
         for hit in result['hits']['hits']:
             print(hit['_source']['name'])
 
