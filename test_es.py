@@ -60,7 +60,7 @@ def random_parameter():
     return date, radius, lon, lat
 
 
-def cost_time(index_name: str,  count: int):  # radius:km
+def arc_cost_time(index_name: str,  count: int):  # radius:km
     # Haversine法测试
     htime = 0
     arctime = 0
@@ -85,6 +85,9 @@ if __name__ == "__main__":
     # test inserting
     #es.bulk_index_docs('test', test_doc_list)
 
+    # test id_query
+    #es.id_query("1A262373", "test", output=True)
+
     # test arc_query
     #es.arc_query("2021-04-20", "test", 100, 32, '1000km', output=True)
 
@@ -95,4 +98,4 @@ if __name__ == "__main__":
     #print(es.date_query("2021-04-20", "test", output=True))
 
     # test the cost time of query based on Haversine method
-    print(cost_time('test', 1))
+    #print(cost_time('test', 1))

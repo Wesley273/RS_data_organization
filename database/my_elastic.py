@@ -47,6 +47,22 @@ class MyElastic:
             result = self.__client.indices.create(index=index_name, body=self.__index_mappings)
             print(result)
 
+    def id_query(self, id: str, index_name: str, output: bool):
+        query = {
+            "size": 1,
+            "query": {
+                "bool": {
+                    "must": {"match": {"_id": id}}
+                }
+            }
+        }
+        result = self.__client.search(index=index_name, body=query)
+        if(output):
+            print(f'对id:"{id}"搜索完成,耗时: ', result['took'], 'ms, 结果如下:')
+            for hit in result['hits']['hits']:
+                print(hit['_source'])
+        return result
+
     def full_text_query(self, date: str, index_name: str, field: str, search_term, output: bool):
         query = {
             "size": 1000,
