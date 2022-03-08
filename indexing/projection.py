@@ -19,7 +19,7 @@ def lonlat2xy(lon, lat):
 
 def get_precise_distance(lon1, lat1, lon2, lat2):
 
-    return geodesic((lat1, lon1), (lat2, lon2)).m
+    return geodesic((lat1, lon1), (lat2, lon2)).km
 
 
 def get_distance(lon1, lat1, lon2, lat2):
@@ -37,4 +37,4 @@ def get_distance(lon1, lat1, lon2, lat2):
     c = 2 * asin(sqrt(a))
     # the average radius of the Earth
     r = 6371.393
-    return c * r * 1000
+    return c * r 

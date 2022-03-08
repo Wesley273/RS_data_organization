@@ -47,23 +47,27 @@ class MyElastic:
             result = self.__client.indices.create(index=index_name, body=self.__index_mappings)
             print(result)
 
-    def full_text_query(self, index_name: str, field: str, search_term):
+    def full_text_query(self, date: str, index_name: str, field: str, search_term, output: bool):
         query = {
             "query": {
-                "match": {
-                    field: search_term
+                "bool": {
+                    "must": {"match": {"date": date}},
+                    "should": {"match": {field: search_term}}
                 }
             }
         }
         result = self.__client.search(index=index_name, body=query)
-        print('全文搜索完成,耗时: ', result['took'], 'ms, 结果如下:')
-        for hit in result['hits']['hits']:
-            print(hit['_source']['name'])
+        if(output):
+            print('全文搜索完成,耗时: ', result['took'], 'ms, 结果如下:')
+            for hit in result['hits']['hits']:
+                print(hit['_source'])
+        return result
 
-    def arc_query(self, index_name: str, lon: float, lat: float, radius: str):
+    def arc_query(self, date: str, index_name: str, lon, lat, radius: str, output: bool):
         query = {
             "query": {
                 "bool": {
+                    "must": {"match": {"date": date}},
                     "filter": {
                         "geo_distance": {
                             "distance": radius,
@@ -79,9 +83,26 @@ class MyElastic:
             }
         }
         result = self.__client.search(index=index_name, body=query)
-        print('全文搜索完成,耗时: ', result['took'], 'ms, 结果如下:')
-        for hit in result['hits']['hits']:
-            print(hit['_source']['name'])
+        if(output):
+            print('范围搜索完成,耗时: ', result['took'], 'ms, 结果如下:')
+            for hit in result['hits']['hits']:
+                print(hit['_source'])
+        return result
+
+    def date_query(self, date: str, index_name: str, output: bool):
+        query = {
+            "query": {
+                "bool": {
+                    "must": {"match": {"date": date}}
+                }
+            }
+        }
+        result = self.__client.search(index=index_name, body=query)
+        if(output):
+            print(f'对{date}日搜索完成,耗时: ', result['took'], 'ms, 结果如下:')
+            for hit in result['hits']['hits']:
+                print(hit['_source'])
+        return result
 
     def bulk_index_docs(self, index_name, doc_list):
         actions = []

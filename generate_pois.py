@@ -50,7 +50,7 @@ def gen_pois(begin: datetime.date, end: datetime.date):
     file.close()
 
 
-def save2es():
+def save2es(client, index_name):
     tables = pd.read_csv(r"data\poi\random_sample.csv")
     doc_list = []
     for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
@@ -61,18 +61,18 @@ def save2es():
             "cover_rate": cover_rate,
             "location": {"lat": lat, "lon": lon}
         })
-    es.bulk_index_docs('test', doc_list)
+    client.bulk_index_docs(index_name, doc_list)
 
 
 if __name__ == "__main__":
     # create the client and index
-    #es = MyElastic()
+    es = MyElastic()
     # es.create_index('test')
 
     # generate pois randomly
     begin = datetime.date(2021, 2, 1)
-    end = datetime.date(2021, 2, 5)
+    end = datetime.date(2022, 2, 2)
     gen_pois(begin, end)
 
     # save docs to elasticsearch
-    #save2es()
+    #save2es(es, 'test')
