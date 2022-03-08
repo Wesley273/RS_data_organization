@@ -5,7 +5,7 @@ from matplotlib.pyplot import table
 from database.my_hbase import MyHBase
 
 if __name__ == "__main__":
-    hbase = MyHBase()
+    #hbase = MyHBase()
     # table=hbase.create_table('test')
     # hbase.delete_table('test')
     data = {
@@ -15,8 +15,8 @@ if __name__ == "__main__":
         'cf5:row': '0', 'cf6:col': '321',
         'cf7:cover_rate': '55',
         'cf8:comment': u'刘博负责,地址与联系方式: 台湾省晶县南长合肥路y座 545681; lei02@example.net; 18235389126'}
-    table = hbase.connection.table('test')
-    bat = table.batch(batch_size=10)
+    #table = hbase.connection.table('test')
+    #bat = table.batch(batch_size=10)
     #table.put(row='1A241665', data=data)
-    row = table.row('1A241665')
-    print(row)
+    #row = table.row('1A241665')
+    #print(row)

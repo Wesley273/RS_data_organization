@@ -27,3 +27,6 @@ class MyHBase:
     def delete_table(self, table_name: str):
         self.connection.disable_table(table_name)
         self.connection.delete_table(table_name, disable=False)
+
+    def byte_transform(raw):
+        return raw.encode('raw_unicode_escape').decode()
