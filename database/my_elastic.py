@@ -5,9 +5,9 @@ from elasticsearch.helpers import bulk
 
 
 class MyElastic:
-    __address = "http://localhost:9200"
 
     def __init__(self):
+        self.__address = "http://localhost:9200"
         self.__client = Elasticsearch(self.__address)
 
     def get_info(self):
@@ -49,7 +49,7 @@ class MyElastic:
 
     def id_query(self, id: str, index_name: str, output: bool):
         query = {
-            "size": 1,
+            "size": 10000,
             "query": {
                 "bool": {
                     "must": {"match": {"_id": id}}
@@ -63,13 +63,20 @@ class MyElastic:
                 print(hit['_source'])
         return result
 
-    def full_text_query(self, date: str, index_name: str, field: str, search_term, output: bool):
+    def full_text_query(self, begin_date: str, end_date: str, index_name: str, field: str, search_term, match_degree: str, output: bool):
         query = {
-            "size": 1000,
+            "size": 10000,
             "query": {
                 "bool": {
-                    "must": {"match": {"date": date}},
-                    "should": {"match": {field: search_term}}
+                    "must": [
+                        {"range": {"date": {"gte": begin_date, "lte": end_date}}},
+                        {"match": {
+                            field: {
+                                "query": search_term,
+                                "minimum_should_match": match_degree
+                            }
+                        }}
+                    ]
                 }
             }
         }
@@ -82,7 +89,7 @@ class MyElastic:
 
     def arc_query(self, date: str, index_name: str, lon, lat, radius: str, output: bool):
         query = {
-            "size": 1000,
+            "size": 10000,
             "query": {
                 "bool": {
                     "must": {"match": {"date": date}},
@@ -109,7 +116,7 @@ class MyElastic:
 
     def date_query(self, date: str, index_name: str, output: bool):
         query = {
-            "size": 1000,
+            "size": 10000,
             "query": {
                 "bool": {
                     "must": {"match": {"date": date}}

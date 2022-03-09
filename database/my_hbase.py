@@ -4,19 +4,19 @@ import happybase
 
 
 class MyHBase:
-    connection = happybase.Connection('localhost', port=9093, autoconnect=False)  # 连接到hbase
-    __families = {
-        'cf1': dict(),  # use defaults
-        'cf2': dict(),
-        'cf3': dict(),
-        'cf4': dict(),
-        'cf5': dict(),
-        'cf6': dict(),
-        'cf7': dict(),
-        'cf8': dict(),
-    }
 
     def __init__(self):
+        self.connection = happybase.Connection('localhost', port=9093, autoconnect=False)  # 连接到hbase
+        self.__families = {
+            'cf1': dict(),  # use defaults
+            'cf2': dict(),
+            'cf3': dict(),
+            'cf4': dict(),
+            'cf5': dict(),
+            'cf6': dict(),
+            'cf7': dict(),
+            'cf8': dict(),
+        }
         self.connection.open()
         print(self.connection.tables())  # 查看hbase现有的所有表名
 
