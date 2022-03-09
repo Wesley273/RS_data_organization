@@ -47,6 +47,23 @@ class MyElastic:
             result = self.__client.indices.create(index=index_name, body=self.__index_mappings)
             print(result)
 
+    def bulk_index_docs(self, index_name, doc_list):
+        actions = []
+        for doc in doc_list:
+            actions.append({
+                "_index": index_name,
+                "_id": doc['code'],
+                "_source": {
+                    "name": doc['name'],
+                    "date": doc['date'],
+                    "cover_rate": doc['cover_rate'],
+                    "location": doc['location']
+                }
+            })
+        # 批量处理
+        success, _ = bulk(self.__client, actions, index=index_name, raise_on_error=True)
+        print('Successfully added %d docs' % success)
+
     def id_query(self, id: str, index_name: str, output: bool):
         query = {
             "size": 10000,
@@ -130,19 +147,22 @@ class MyElastic:
                 print(hit['_source'])
         return result
 
-    def bulk_index_docs(self, index_name, doc_list):
-        actions = []
-        for doc in doc_list:
-            actions.append({
-                "_index": index_name,
-                "_id": doc['code'],
-                "_source": {
-                    "name": doc['name'],
-                    "date": doc['date'],
-                    "cover_rate": doc['cover_rate'],
-                    "location": doc['location']
+    def scroll_date_query(self, begin_date: str, end_date: str, index_name: str, output: bool):
+        query = {
+            "query": {
+                "bool": {
+                    "must": {"range": {"date": {"gte": begin_date, "lte": end_date}}}
                 }
-            })
-        # 批量处理
-        success, _ = bulk(self.__client, actions, index=index_name, raise_on_error=True)
-        print('Successfully added %d docs' % success)
+            }
+        }
+        result = self.__client.search(index=index_name, scroll='5m', timeout='3s', size=100, body=query)
+        mdata = result.get("hits").get("hits")
+        if not mdata:
+            print('empty!')
+        scroll_id = result["_scroll_id"]
+        for i in range(0, int(result["hits"]["total"]['value']/100+1)):
+            res = self.__client.scroll(scroll_id=scroll_id, scroll='5m')  # scroll参数必须指定否则会报错
+            mdata += res["hits"]["hits"]
+            # print(res)
+        print(len(mdata))
+        return mdata

@@ -92,10 +92,13 @@ if __name__ == "__main__":
     #es.arc_query("2021-04-20", "test", 100, 32, '100000km', output=True)
 
     # test full_text_query
-    es.full_text_query("2021-02-01", "2021-02-01", "test", "name", "沈阳超科考站", "95%", output=True)
+    #es.full_text_query("2021-02-01", "2021-02-01", "test", "name", "沈阳超科考站", "95%", output=True)
 
     # test date_query
     #print(es.date_query("2021-04-20", "test", output=True))
 
     # test the cost time of query based on Haversine method
     #print(cost_time('test', 1))
+
+    # test scroll query
+    es.scroll_date_query("2021-02-02", "2022-02-01", "test", output=False)
