@@ -2,8 +2,7 @@ import csv
 import datetime
 import random
 from turtle import *
-from matplotlib import markers, pyplot as plt
-import numpy as np
+
 import pylab
 import rasterio
 from numpy import mean
