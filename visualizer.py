@@ -2,7 +2,8 @@ import csv
 import datetime
 import random
 from turtle import *
-
+from matplotlib import markers, pyplot as plt
+import numpy as np
 import pylab
 import rasterio
 from numpy import mean
@@ -116,3 +117,5 @@ if __name__ == "__main__":
 
     # Statistics on the snow cover rate in the Sanjiangyuan area
     #analyzer = SanJiangYuanAnalyzer()
+
+    # show difference between hilbert indexing and xOy indexing
