@@ -21,8 +21,8 @@ def gen_comment():
 
 
 def probability(pixel: int):
-    p = 0.002*pixel
-    if (random.random()*100 <= p):
+    p = 0.00002*pixel
+    if (random.random() <= p):
         return True
     else:
         return False
@@ -40,7 +40,7 @@ def gen_pois_nozero(csv_name: str, begin: datetime.date, end: datetime.date):
         img_array = ds.read(1)
         for row in range(len(img_array)):
             for col in range(len(img_array[row])):
-                if(img_array[row][col] > 0):
+                if((img_array[row][col] > 0) & (random.random() <= 0.01)):
                     date = int(str(day).replace("-", "", 2))
                     poi = POI(date, row, col, "name", img_array[row][col], "comment")
                     points.append(poi)
