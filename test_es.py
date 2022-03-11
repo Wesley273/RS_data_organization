@@ -36,6 +36,14 @@ test_doc_list = [{
 }]
 
 
+def probability(pixel: int):
+    p = 0.00002*pixel
+    if (random.random() <= p):
+        return True
+    else:
+        return False
+
+
 def arcquery_using_haversine(datequery_result, lon, lat, radius, output: bool):  # radius:km
     result = []
     if(output):
@@ -83,12 +91,14 @@ def id_query_cost(csv_name: str, client, index_name):
     cost = 0
     count = 0
     for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
-        if(random.random() <= 0.5):
+        if(probability(cover_rate)):
             start = time.time()
             client.id_query(code, index_name, output=False)
             end = time.time()
             cost += (end-start)*1000
             count += 1
+            print(f'已测试{count}条')
+    print(f'平均用时{cost/count}ms, 共{count}次查询')
     return cost/count, count
 
 
@@ -120,4 +130,4 @@ if __name__ == "__main__":
     # es.scroll_date_query("2021-02-02", "2022-02-01", "test", output=False)
 
     # test id_query cost time
-    print(id_query_cost('random_sample', es, 'test'))
+    id_query_cost('2021_3_1', es, 'test-large')

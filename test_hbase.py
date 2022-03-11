@@ -5,6 +5,14 @@ import pandas as pd
 from database.my_hbase import MyHBase
 
 
+def probability(pixel: int):
+    p = 0.00002*pixel
+    if (random.random() <= p):
+        return True
+    else:
+        return False
+
+
 def save2hbase(csv_name: str, hbase_client, index_name):
     tables = pd.read_csv(f"data\\poi\\{csv_name}.csv")
     i = 0
@@ -28,12 +36,14 @@ def test_query_time(csv_name: str, hbase_client, index_name):
     cost = 0
     count = 0
     for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
-        if(random.random() <= 0.5):
+        if(random.random() <= 0.00017):
             start = time.time()
             hbase_client.get_row(index_name, code, False)
             end = time.time()
             cost += (end-start)*1000
             count += 1
+            print(f'已测试{count}条')
+    print(f'平均用时{cost/count}ms, 共{count}次查询')
     return cost/count, count
 
 
@@ -46,7 +56,7 @@ if __name__ == "__main__":
     # hbase.delete_table('test')
 
     # save data in csv to hbase
-    save2hbase('2021_3_1', hbase, 'test-large')
+    #save2hbase('2021_3_1', hbase, 'test-large')
 
     # the time cost of query
-    #print(test_query_time('random_sample', hbase, 'test'))
+    test_query_time('2021_3_1', hbase, 'test-large')
