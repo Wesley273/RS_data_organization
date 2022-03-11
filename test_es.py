@@ -2,6 +2,8 @@ import datetime
 import random
 import time
 
+import pandas as pd
+
 import generate_pois
 import indexing.projection
 from database.my_elastic import MyElastic
@@ -76,6 +78,20 @@ def arc_cost_time(index_name: str,  count: int):  # radius:km
     return htime/count, arctime/count
 
 
+def id_query_cost(csv_name: str, client, index_name):
+    tables = pd.read_csv(f"data\\poi\\{csv_name}.csv")
+    cost = 0
+    count = 0
+    for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
+        if(random.random() <= 0.5):
+            start = time.time()
+            client.id_query(code, index_name, output=False)
+            end = time.time()
+            cost += (end-start)*1000
+            count += 1
+    return cost/count, count
+
+
 if __name__ == "__main__":
     # basic infos
     es = MyElastic()
@@ -83,22 +99,25 @@ if __name__ == "__main__":
     # es.create_index('test')
 
     # test inserting
-    #es.bulk_index_docs('test', test_doc_list)
+    # es.bulk_index_docs('test', test_doc_list)
 
     # test id_query
     #es.id_query("1A262373", "test", output=True)
 
     # test arc_query
-    #es.arc_query("2021-04-20", "test", 100, 32, '100000km', output=True)
+    # es.arc_query("2021-04-20", "test", 100, 32, '100000km', output=True)
 
     # test full_text_query
-    #es.full_text_query("2021-02-01", "2021-02-01", "test", "name", "沈阳超科考站", "95%", output=True)
+    # es.full_text_query("2021-02-01", "2021-02-01", "test", "name", "沈阳超科考站", "95%", output=True)
 
     # test date_query
-    #print(es.date_query("2021-04-20", "test", output=True))
+    # print(es.date_query("2021-04-20", "test", output=True))
 
     # test the cost time of query based on Haversine method
-    #print(cost_time('test', 1))
+    # print(cost_time('test', 1))
 
     # test scroll query
-    es.scroll_date_query("2021-02-02", "2022-02-01", "test", output=False)
+    # es.scroll_date_query("2021-02-02", "2022-02-01", "test", output=False)
+
+    # test id_query cost time
+    print(id_query_cost('random_sample', es, 'test'))

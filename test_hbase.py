@@ -1,22 +1,49 @@
-from unicodedata import name
+import random
+import time
+import pandas as pd
 
-import happybase
-from matplotlib.pyplot import table
 from database.my_hbase import MyHBase
 
+
+def save2hbase(csv_name: str, hbase_client, index_name):
+    tables = pd.read_csv(f"data\\poi\\{csv_name}.csv")
+    for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
+        data = {
+            'cf1:date': date,
+            'cf2:name': name,
+            'cf3:lon': str(lon),
+            'cf4:lat': str(lat),
+            'cf5:row': str(row),
+            'cf6:col': str(col),
+            'cf7:cover_rate': str(cover_rate),
+            'cf8:comment': comment}
+        hbase_client.insert_row(index_name, code, data)
+
+
+def test_query_time(csv_name: str, hbase_client, index_name):
+    tables = pd.read_csv(f"data\\poi\\{csv_name}.csv")
+    cost = 0
+    count = 0
+    for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
+        if(random.random() <= 0.5):
+            start = time.time()
+            hbase_client.get_row(index_name, code, False)
+            end = time.time()
+            cost += (end-start)*1000
+            count += 1
+    return cost/count, count
+
+
 if __name__ == "__main__":
-    #hbase = MyHBase()
+    # initiate the hbase
+    hbase = MyHBase()
+
+    # test creat and delete table
     # table=hbase.create_table('test')
     # hbase.delete_table('test')
-    data = {
-        'cf1:date': '2021-2-1',
-        'cf2:name': u'台北利科考站',
-        'cf3:lon': '75.418335259978', 'cf4:lat': '29.8874001627856',
-        'cf5:row': '0', 'cf6:col': '321',
-        'cf7:cover_rate': '55',
-        'cf8:comment': u'刘博负责,地址与联系方式: 台湾省晶县南长合肥路y座 545681; lei02@example.net; 18235389126'}
-    #table = hbase.connection.table('test')
-    #bat = table.batch(batch_size=10)
-    #table.put(row='1A241665', data=data)
-    #row = table.row('1A241665')
-    #print(row)
+
+    # save data in csv to hbase
+    #save2hbase('random_sample', hbase, 'test')
+
+    # the time cost of query
+    print(test_query_time('random_sample', hbase, 'test'))
