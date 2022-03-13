@@ -77,7 +77,7 @@ def save2es(csv_name: str, client, index_name):
     doc_list = []
     for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
         doc_list.append({
-            "code": code,
+            "code": '29A'+str(row*1000+col),
             "name": name,
             "date": date,
             "cover_rate": cover_rate,
@@ -93,12 +93,12 @@ def save2es(csv_name: str, client, index_name):
 if __name__ == "__main__":
     # create the client and index
     es = MyElastic()
-    #es.create_index('test-large')
+    # es.create_index('test-indexing')
 
-    # generate pois randomly
+    # generate pois
     begin = datetime.date(2021, 2, 1)
     end = datetime.date(2021, 2, 2)
+    #gen_pois_nozero("2021_2_1_nozero", begin, end)
 
     # save docs to elasticsearch
-    save2es("2021_3_1", es, 'test-large')
-    #gen_pois_nozero("2021_2_1_nozero", begin, end)
+    #save2es("2021_3_1", es, 'test-indexing')

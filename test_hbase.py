@@ -26,9 +26,10 @@ def save2hbase(csv_name: str, hbase_client, index_name):
             'cf6:col': str(col),
             'cf7:cover_rate': str(cover_rate),
             'cf8:comment': comment}
-        hbase_client.insert_row(index_name, code, data)
+        print('29A'+str(row*1000+col))
+        hbase_client.insert_row(index_name, '29A'+str(row*1000+col), data)
         i += 1
-        print(f'已存入{i}条')
+        # print(f'已存入{i}条')
 
 
 def test_query_time(csv_name: str, hbase_client, index_name):
@@ -36,9 +37,9 @@ def test_query_time(csv_name: str, hbase_client, index_name):
     cost = 0
     count = 0
     for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
-        if(random.random() <= 0.00017):
+        if(probability(cover_rate)):
             start = time.time()
-            hbase_client.get_row(index_name, code, False)
+            hbase_client.get_row(index_name, '29A'+str(row*1000+col), False)
             end = time.time()
             cost += (end-start)*1000
             count += 1
@@ -52,11 +53,11 @@ if __name__ == "__main__":
     hbase = MyHBase()
 
     # test creat and delete table
-    # table=hbase.create_table('test-large')
-    # hbase.delete_table('test')
+    # table=hbase.create_table('test-indexing')
+    # hbase.delete_table('test-indexing')
 
     # save data in csv to hbase
-    #save2hbase('2021_3_1', hbase, 'test-large')
+    #save2hbase('2021_3_1', hbase, 'test-indexing')
 
     # the time cost of query
-    test_query_time('2021_3_1', hbase, 'test-large')
+    test_query_time('2021_3_1', hbase, 'test-indexing')

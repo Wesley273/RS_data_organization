@@ -109,10 +109,10 @@ class HilbertCurver:
 
 if __name__ == "__main__":
     # show hilbert curve
-    #img = HilbertCurver(8)
+    img = HilbertCurver(2)
 
     # show pois
-    sample = Sampler(rasterio.open(r'data\img\NDSI_2021_02_19.tif').read(1))
+    #sample = Sampler(rasterio.open(r'data\img\NDSI_2021_02_19.tif').read(1))
 
     # Statistics on the snow cover rate in the Sanjiangyuan area
     #analyzer = SanJiangYuanAnalyzer()
