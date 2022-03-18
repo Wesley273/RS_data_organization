@@ -37,8 +37,16 @@ test_doc_list = [{
 }]
 
 
-def probability(pixel: int):
-    p = 0.00002*pixel
+def average_p(pixel: int):
+    p = 0.00024881
+    if (random.random() <= p):
+        return True
+    else:
+        return False
+
+
+def practical_p(pixel: int):
+    p = 0.00003*pixel
     if (random.random() <= p):
         return True
     else:
@@ -92,7 +100,7 @@ def id_query_cost(csv_name: str, client, index_name):
     cost = 0
     count = 0
     for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
-        if(random.random() <= 0.00017):
+        if(practical_p(cover_rate)):
             start = time.time()
             client.id_query('29A'+str(row*1000+col), index_name, output=False)
             end = time.time()
@@ -128,8 +136,8 @@ if __name__ == "__main__":
 
     # test arc_query
     #result = es.arc_query("2021-03-01", "test-large", 80, 32, '250km', output=False)
-    total, cost_list = test_indexing('5000km')
-    print(total,cost_list.mean())
+    #total, cost_list = test_indexing('5000km')
+    # print(total,cost_list.mean())
 
     # test full_text_query
     #es.full_text_query("2021-03-01", "2021-03-01", "test", "name", "沈阳龙科考站", "95%", output=True)
@@ -144,4 +152,4 @@ if __name__ == "__main__":
     #es.scroll_date_query("2021-02-01", "2022-02-02", "test", output=False)
 
     # test id_query cost time
-    #id_query_cost('2021_3_1', es, 'test-indexing')
+    id_query_cost('2021_3_1', es, 'test-indexing')

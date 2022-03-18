@@ -49,8 +49,8 @@ class Sampler:
         pylab.show()
 
     def probability(self, pixel: int):
-        p = 0.002*pixel
-        if (random.random()*100 <= p):
+        p = 0.00006*pixel
+        if (random.random() <= p):
             return True
         else:
             return False
@@ -109,10 +109,10 @@ class HilbertCurver:
 
 if __name__ == "__main__":
     # show hilbert curve
-    img = HilbertCurver(2)
+    #img = HilbertCurver(2)
 
     # show pois
-    #sample = Sampler(rasterio.open(r'data\img\NDSI_2021_02_19.tif').read(1))
+    sample = Sampler(rasterio.open(r'data\img\NDSI_2021_02_01.tif').read(1))
 
     # Statistics on the snow cover rate in the Sanjiangyuan area
     #analyzer = SanJiangYuanAnalyzer()

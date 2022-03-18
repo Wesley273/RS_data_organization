@@ -20,6 +20,7 @@ def basic_test(row: int, col: int):
         # 获取第一个波段数据，跟GDAL一样索引从1开始
         # 直接获得numpy.ndarray类型的二维数组表示，如果read()函数不加参数，则得到所有波段（第一个维度是波段）
         band1 = ds.read(1)
+        print(band1.sum())
         print(f'第一波段的最大值:{band1.max()}')
         print(f'第一波段的最小值:{band1.min()}')
         print(f'第一波段的平均值:{band1.mean()}')

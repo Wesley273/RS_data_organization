@@ -5,8 +5,16 @@ import pandas as pd
 from database.my_hbase import MyHBase
 
 
-def probability(pixel: int):
-    p = 0.00002*pixel
+def average_p(pixel: int):
+    p = 0.00024881
+    if (random.random() <= p):
+        return True
+    else:
+        return False
+
+
+def practical_p(pixel: int):
+    p = 0.00003*pixel
     if (random.random() <= p):
         return True
     else:
@@ -37,7 +45,7 @@ def test_query_time(csv_name: str, hbase_client, index_name):
     cost = 0
     count = 0
     for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
-        if(probability(cover_rate)):
+        if(average_p(cover_rate)):
             start = time.time()
             hbase_client.get_row(index_name, '29A'+str(row*1000+col), False)
             end = time.time()
@@ -53,11 +61,11 @@ if __name__ == "__main__":
     hbase = MyHBase()
 
     # test creat and delete table
-    # table=hbase.create_table('test-indexing')
+    # table=hbase.create_table('test-practical')
     # hbase.delete_table('test-indexing')
 
     # save data in csv to hbase
-    #save2hbase('2021_3_1', hbase, 'test-indexing')
+    #save2hbase(csv_name='practical_sample', hbase_client=hbase, index_name='test-practical')
 
     # the time cost of query
     test_query_time('2021_3_1', hbase, 'test-indexing')
