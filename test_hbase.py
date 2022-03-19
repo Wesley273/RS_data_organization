@@ -75,8 +75,8 @@ if __name__ == "__main__":
 
     # the time cost of query
     cost_total = 0
-    encoder='xoy'
-    label='equably'
+    encoder='hilbert'
+    label='cover_rate'
     for i in range(1, 101):
         cost, _ = id_query_cost('test_id_query',  hbase, 'test-large', encoder, label)
         cost_total += cost

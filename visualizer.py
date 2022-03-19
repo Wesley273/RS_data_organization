@@ -4,6 +4,7 @@ import random
 from turtle import *
 
 import pylab
+import numpy as np
 import rasterio
 from numpy import mean
 from PIL import Image
@@ -44,7 +45,7 @@ class Sampler:
         i = 0
         for row in range(self.image.size[0]):
             for col in range(self.image.size[1]):
-                #if((row % 34 == 0) & (col % 57 == 0) & (row != 0) & (col != 0)):
+                # if((row % 34 == 0) & (col % 57 == 0) & (row != 0) & (col != 0)):
                 if(self.practical_p(self.img_array[col][row])):
                     x.append(row)
                     y.append(col)
