@@ -74,10 +74,7 @@ if __name__ == "__main__":
     # print(hbase.get_row(index_name='test-practical',rowkey='1A245833',decoder=True))
 
     # the time cost of query
-    cost_total = 0
-    encoder='hilbert'
-    label='cover_rate'
-    for i in range(1, 101):
-        cost, _ = id_query_cost('test_id_query',  hbase, 'test-large', encoder, label)
-        cost_total += cost
-    print(cost_total/100,encoder,label)
+    #cost_total = 0
+    #encoder='hilbert'
+    #label='cover_rate'
+    #cost, _ = id_query_cost('test_id_query',  hbase, 'test-large', encoder, label)
