@@ -8,6 +8,8 @@ import rasterio
 from numpy import mean
 from PIL import Image
 
+from test_hbase import fixed_p
+
 
 class SanJiangYuanAnalyzer:
 
@@ -39,16 +41,27 @@ class Sampler:
         print(self.image.size)
         x = []
         y = []
+        i = 0
         for row in range(self.image.size[0]):
             for col in range(self.image.size[1]):
-                if(self.probability(self.img_array[col][row])):
+                #if((row % 34 == 0) & (col % 57 == 0) & (row != 0) & (col != 0)):
+                if(self.practical_p(self.img_array[col][row])):
                     x.append(row)
                     y.append(col)
+                    i += 1
+        print(i)
         pylab.imshow(self.image)
         pylab.plot(x, y, 'r*')
         pylab.show()
 
-    def probability(self, pixel: int):
+    def average_p(self, pixel: int):
+        p = 0.00024881
+        if (random.random() <= p):
+            return True
+        else:
+            return False
+
+    def practical_p(self, pixel: int):
         p = 0.00006*pixel
         if (random.random() <= p):
             return True
@@ -112,7 +125,7 @@ if __name__ == "__main__":
     #img = HilbertCurver(2)
 
     # show pois
-    sample = Sampler(rasterio.open(r'data\img\NDSI_2021_02_01.tif').read(1))
+    sample = Sampler(rasterio.open(r'data\img\NDSI_2021_03_01.tif').read(1))
 
     # Statistics on the snow cover rate in the Sanjiangyuan area
     #analyzer = SanJiangYuanAnalyzer()

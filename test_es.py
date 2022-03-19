@@ -5,40 +5,12 @@ import numpy as np
 
 import pandas as pd
 
-import generate_pois
 import indexing.projection
 from database.my_elastic import MyElastic
 
-test_doc_list = [{
-    "code": 1213,
-    "name": generate_pois.gen_name(),
-    "date": "2020-01-02",
-    "cover_rate": 90,
-    "location": {"lat": 31.256224, "lon": 121.462311}
-}, {
-    "code": 2432,
-    "date": "2020-01-03",
-    "cover_rate": 90,
-    "name": generate_pois.gen_name(),
-    "location": "POINT (121.460186 31.251281)"
-}, {
-    "code": 3543,
-    "date": "2020-01-04",
-    "name": generate_pois.gen_name(),
-    "cover_rate": 90,
-    "location": "POINT (121.473939 31.253531)"
-}, {
-    "code": 3244,
-    "date": "2020-01-05",
-    "name": generate_pois.gen_name(),
-    "cover_rate": 90,
-    "location": "POINT (121.448215 31.26229)"
 
-}]
-
-
-def average_p(pixel: int):
-    p = 0.00024881
+def fixed_p(pixel: int):
+    p = 0.5
     if (random.random() <= p):
         return True
     else:
@@ -79,39 +51,27 @@ def random_parameter():
     return date, radius, lon, lat
 
 
-def arc_cost_time(index_name: str,  count: int):  # radius:km
-    # Haversine法测试
-    htime = 0
-    arctime = 0
-    for i in range(1, count+1):
-        date, radius, lon, lat = random_parameter()
-        result = es.date_query(date, index_name, output=False)
-        htime += result['took']
-        _, cost = arcquery_using_haversine(result, lon, lat, radius, output=False)
-        htime += cost
-    # arc_query法测试
-        result = es.arc_query(date, "test", lon, lat, str(radius)+"km", output=False)
-        arctime += result['took']
-    return htime/count, arctime/count
-
-
-def id_query_cost(csv_name: str, client, index_name):
+def id_query_cost(csv_name: str, client, index_name, encoder: str, label: str):
     tables = pd.read_csv(f"data\\poi\\{csv_name}.csv")
     cost = 0
     count = 0
-    for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
-        if(practical_p(cover_rate)):
+    for code, date, name, lon, lat, row, col, cover_rate, comment, lab in tables.iloc:
+        if(lab == label):
+            if encoder == 'xoy':
+                code = '29A'+str(row*1000+col)
+            if encoder == 'hilbert':
+                code = code
             start = time.time()
-            client.id_query('29A'+str(row*1000+col), index_name, output=False)
+            client.id_query(code, index_name, output=False)
             end = time.time()
             cost += (end-start)*1000
             count += 1
-            print(f'已测试{count}条')
+            # print(f'已测试{count}条')
     print(f'平均用时{cost/count}ms, 共{count}次查询')
     return cost/count, count
 
 
-def test_indexing(radius: str):
+def test_arc_query(radius: str):
     cost_list = np.zeros(100)
     rand_lon = random.randint(80, 85)
     rand_lat = random.randint(20, 35)
@@ -136,7 +96,7 @@ if __name__ == "__main__":
 
     # test arc_query
     #result = es.arc_query("2021-03-01", "test-large", 80, 32, '250km', output=False)
-    #total, cost_list = test_indexing('5000km')
+    #total, cost_list = test_arc_query('5000km')
     # print(total,cost_list.mean())
 
     # test full_text_query
@@ -145,11 +105,14 @@ if __name__ == "__main__":
     # test date_query
     # print(es.date_query("2021-04-20", "test", output=True))
 
-    # test the cost time of query based on Haversine method
-    # print(cost_time('test', 1))
-
     # test scroll query
     #es.scroll_date_query("2021-02-01", "2022-02-02", "test", output=False)
 
     # test id_query cost time
-    id_query_cost('2021_3_1', es, 'test-indexing')
+    cost_total = 0
+    encoder = 'xoy'
+    label = 'equably'
+    for i in range(1, 101):
+        cost, _ = id_query_cost('test_id_query',  es, 'test-large', encoder, label)
+        cost_total += cost
+    print(cost_total/100, encoder, label)

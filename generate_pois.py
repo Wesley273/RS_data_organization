@@ -63,6 +63,7 @@ def gen_pois(csv_name: str, begin: datetime.date, end: datetime.date):
         for row in range(len(img_array)):
             for col in range(len(img_array[row])):
                 if(practical_p(img_array[row][col])):
+                    # if((col % 34 == 0) & (row % 57 == 0) & (col != 0) & (row != 0)):
                     date = int(str(day).replace("-", "", 2))
                     poi = POI(date, row, col, gen_name(), img_array[row][col], gen_comment())
                     points.append(poi)
@@ -77,7 +78,7 @@ def save2es(csv_name: str, client, index_name):
     doc_list = []
     for code, date, name, lon, lat, row, col, cover_rate, comment in tables.iloc:
         doc_list.append({
-            "code": '29A'+str(row*1000+col),
+            "code": code,
             "name": name,
             "date": date,
             "cover_rate": cover_rate,
@@ -96,9 +97,9 @@ if __name__ == "__main__":
     # es.create_index('test-practical')
 
     # generate pois
-    begin = datetime.date(2021, 2, 1)
-    end = datetime.date(2022, 2, 2)
-    gen_pois("practical_sample", begin, end)
+    begin = datetime.date(2021, 3, 1)
+    end = datetime.date(2021, 3, 2)
+    #gen_pois_simple("test_sample", begin, end)
 
     # save docs to elasticsearch
     #save2es("practical_sample", es, 'test-practical')
