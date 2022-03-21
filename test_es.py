@@ -1,8 +1,7 @@
-import datetime
 import random
 import time
-import numpy as np
 
+import numpy as np
 import pandas as pd
 
 import indexing.projection
@@ -40,15 +39,6 @@ def arcquery_using_haversine(datequery_result, lon, lat, radius, output: bool): 
     htime_end = time.time()
     htime = 1000*(htime_end-htime_start)
     return result, htime
-
-
-def random_parameter():
-    begin_day = datetime.date(2021, 1, 31)
-    date = str(begin_day + datetime.timedelta(random.randint(1, 365)))
-    radius = random.randint(5000, 6000)
-    lon = float(random.randint(77, 92))
-    lat = float(random.randint(21, 40))
-    return date, radius, lon, lat
 
 
 def id_query_cost(csv_name: str, client, index_name, encoder: str, label: str):
@@ -103,7 +93,7 @@ if __name__ == "__main__":
     #es.full_text_query("2021-03-01", "2021-03-01", "test-practical", "name", "沈阳龙科考站", "95%", output=True)
 
     # test date_query
-    # print(es.date_query("2021-04-20", "test", output=True))
+    print(es.date_query("2021-04-20", "test", output=True))
 
     # test scroll query
     #es.scroll_date_query("2021-02-01", "2022-02-02", "test-practical", output=False)
@@ -112,4 +102,7 @@ if __name__ == "__main__":
     cost_total = 0
     encoder = 'xoy'
     label = 'equably'
-    #cost, _ = id_query_cost('test_id_query',  es, 'test-large', encoder, label)
+    # for i in range(1, 101):
+    #    cost, _ = id_query_cost('test_id_query',  es, 'test-indexing', encoder, label)
+    #    cost_total += cost
+    #print(cost_total/100, encoder, label)
