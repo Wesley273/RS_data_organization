@@ -10,12 +10,6 @@ class MyHBase:
         self.__families = {
             'cf1': dict(),  # use defaults
             'cf2': dict(),
-            'cf3': dict(),
-            'cf4': dict(),
-            'cf5': dict(),
-            'cf6': dict(),
-            'cf7': dict(),
-            'cf8': dict(),
         }
         self.connection.open()
         print(self.connection.tables())  # 查看hbase现有的所有表名
