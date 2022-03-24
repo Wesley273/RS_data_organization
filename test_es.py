@@ -93,16 +93,18 @@ if __name__ == "__main__":
     #es.full_text_query("2021-03-01", "2021-03-01", "test-practical", "name", "沈阳龙科考站", "95%", output=True)
 
     # test date_query
-    print(es.date_query("2021-04-20", "test", output=True))
+    #print(es.date_query("2021-04-20", "test", output=True))
 
     # test scroll query
     #es.scroll_date_query("2021-02-01", "2022-02-02", "test-practical", output=False)
 
     # test id_query cost time
+    '''
     cost_total = 0
     encoder = 'xoy'
     label = 'equably'
-    # for i in range(1, 101):
-    #    cost, _ = id_query_cost('test_id_query',  es, 'test-indexing', encoder, label)
-    #    cost_total += cost
-    #print(cost_total/100, encoder, label)
+     for i in range(1, 101):
+        cost, _ = id_query_cost('test_id_query',  es, 'test-indexing', encoder, label)
+        cost_total += cost
+    print(cost_total/100, encoder, label)
+    '''

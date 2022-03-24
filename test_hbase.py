@@ -69,7 +69,7 @@ if __name__ == "__main__":
     #hbase.delete_table('test-indexing')
 
     # save data in csv to hbase
-    save2hbase(csv_name='2021_3_1', hbase_client=hbase, index_name='test-large-xoy')
+    #save2hbase(csv_name='2021_3_1', hbase_client=hbase, index_name='test-large-xoy')
 
     # test row_query
     # print(hbase.get_row(index_name='test-colfamily',rowkey='1A245833',decoder=True))
