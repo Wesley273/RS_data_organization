@@ -1,14 +1,14 @@
-def xy2d(n, x, y):
+def xy2d(n, u, v):
     """
      convert (x,y) to d
     """
-    rx = ry = d = 0
+    ru = rv = d = 0
     s = n//2
     while s > 0:
-        rx = (x & s) > 0
-        ry = (y & s) > 0
-        d += s * s * ((3 * rx) ^ ry)
-        x, y = __rot(n, x, y, rx, ry)
+        ru = (u & s) > 0
+        rv = (v & s) > 0
+        d += s * s * ((3 * ru) ^ rv)
+        u, v = __rot(n, u, v, ru, rv)
         s //= 2
     return d
 
@@ -17,30 +17,30 @@ def d2xy(n, d):
     """
      convert d to (x,y)
     """
-    rx = ry = t = d
-    x = y = 0
+    ru = rv = t = d
+    u = v = 0
     s = 1
     while (s < n):
-        rx = 1 & (t//2)
-        ry = 1 & (t ^ rx)
-        x, y = __rot(s, x, y, rx, ry)
-        x += s * rx
-        y += s * ry
+        ru = 1 & (t//2)
+        rv = 1 & (t ^ ru)
+        u, v = __rot(s, u, v, ru, rv)
+        u += s * ru
+        v += s * rv
         t //= 4
         s *= 2
-    return x, y
+    return u, v
 
 
-def __rot(n, x, y, rx, ry):
+def __rot(n, u, v, ru, rv):
     """
     rotate/flip a quadrant appropriately
     """
-    if (ry == 0):
-        if (rx == 1):
-            x = n - 1 - x
-            y = n - 1 - y
+    if (rv == 0):
+        if (ru == 1):
+            u = n - 1 - u
+            v = n - 1 - v
         # Swap x and y
-        temp = x
-        x = y
-        y = temp
-    return x, y
+        temp = u
+        u = v
+        v = temp
+    return u, v

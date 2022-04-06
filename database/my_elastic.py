@@ -164,5 +164,5 @@ class MyElastic:
             res = self.__client.scroll(scroll_id=scroll_id, scroll='5m')  # scroll参数必须指定否则会报错
             mdata += res["hits"]["hits"]
             # print(res)
-        print(len(mdata))
+        #print(len(mdata))
         return mdata

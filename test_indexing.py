@@ -44,3 +44,4 @@ if __name__ == "__main__":
     basic_test(row, col)
     poi = indexing.geo_points.POI(20190228, row, col, "name", 90, "comment")
     print(indexing.projection.get_distance(70.52421,45.66236,70.52421,16.63815))
+    print(indexing.encoder.xy2d(1,1,1))
