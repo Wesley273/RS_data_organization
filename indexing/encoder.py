@@ -1,6 +1,6 @@
-def xy2d(n, u, v):
+def uv2d(n, u, v):
     """
-     convert (x,y) to d
+     convert (u,v) to d
     """
     ru = rv = d = 0
     s = n//2
@@ -13,9 +13,9 @@ def xy2d(n, u, v):
     return d
 
 
-def d2xy(n, d):
+def d2uv(n, d):
     """
-     convert d to (x,y)
+     convert d to (u,v)
     """
     ru = rv = t = d
     u = v = 0
@@ -39,8 +39,6 @@ def __rot(n, u, v, ru, rv):
         if (ru == 1):
             u = n - 1 - u
             v = n - 1 - v
-        # Swap x and y
-        temp = u
-        u = v
-        v = temp
+        # Swap u and v
+        u, v = v, u
     return u, v

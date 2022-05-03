@@ -15,7 +15,7 @@ class POI:
         # fill in the other properties
         self.date = self.get_date(date)
         self.delta_date = (self.date-self.__begin_day).days
-        self.code = str(self.delta_date) + 'A' + str(encoder.xy2d(self.__n, row, col))
+        self.code = str(self.delta_date) + 'A' + str(encoder.uv2d(self.__n, row, col))
         self.__geo_x = self.__left_bound + row*self.__cell
         self.__geo_y = self.__top_bound - col*self.__cell
         self.lon, self.lat = projection.xy2lonlat(self.__geo_x, self.__geo_y)
