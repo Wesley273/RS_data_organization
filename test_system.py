@@ -21,9 +21,9 @@ def test_arc_query(radius: str, full: bool):
 
 if __name__ == "__main__":
     my_system = MySystem()
-    """
-    print(my_system.get_row(rowkey='1A1684', index_name='test-practical', full=True))
-    """
+    
+    print(my_system.get_row(rowkey='1A1684', index_name='test-practical'))
+    
 
     """
     result=test_arc_query("50km", False)
@@ -34,7 +34,8 @@ if __name__ == "__main__":
     my_system.print_result(result)
     """
 
-
+    """
     result=my_system.full_text_query("2021-03-01", "2021-03-01", "test-practical", "name", "沈阳龙", "100%", full=True)
     my_system.print_result(result)
+    """
     

@@ -45,10 +45,15 @@ class MySystem:
         else:
             return es_result
 
-    def get_row(self, rowkey: str, index_name: str,  full: bool):
-        es_result = self.__es.id_query(rowkey, index_name, False)
-        if(full):
-            result = self.__merge_result(index_name, es_result)
-            return result
-        else:
-            return es_result['hits']['hits']
+    def get_row(self, rowkey: str, index_name: str):
+        result = {}
+        location = {}
+        row = self.__hbase.get_row(index_name, rowkey, True)
+        result['name'] = row['name']
+        result['date'] = row['date']
+        result['cover_rate'] = row['cover_rate']
+        location['lon'] = row['lon']
+        location['lat'] = row['lat']
+        result['location'] = location
+        result['comment'] = row['comment']
+        return result
