@@ -15,7 +15,7 @@ class MySystem:
         merged = []
         for hit in es_result['hits']['hits']:
             hit['_source']['comment'] = self.__hbase.get_row(index_name, hit['_id'], True)['comment']
-            merged.append(hit['_source'])
+            merged.append(hit)
         return merged
 
     def arc_query(self, date, index_name, lon, lat, radius,  full: bool):
