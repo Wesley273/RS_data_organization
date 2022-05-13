@@ -7,6 +7,10 @@ class MySystem:
         self.__hbase = MyHBase()
         self.__es = MyElastic()
 
+    def print_result(self, result):
+        for hit in result:
+            print(hit['_source'])
+
     def __merge_result(self, index_name, es_result):
         merged = []
         for hit in es_result['hits']['hits']:
@@ -36,10 +40,10 @@ class MySystem:
             merged = []
             for hit in es_result:
                 hit['_source']['comment'] = self.__hbase.get_row(index_name, hit['_id'], True)['comment']
-                merged.append(hit['_source'])
+                merged.append(hit)
             return merged
         else:
-            return es_result['hits']['hits']
+            return es_result
 
     def get_row(self, rowkey: str, index_name: str,  full: bool):
         es_result = self.__es.id_query(rowkey, index_name, False)
