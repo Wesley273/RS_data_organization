@@ -34,8 +34,8 @@ if __name__ == "__main__":
     my_system.print_result(result)
     """
 
-    """
+    
     result=my_system.full_text_query("2021-03-01", "2021-03-01", "test-practical", "name", "沈阳龙", "100%", full=True)
     my_system.print_result(result)
-    """
+    
     
