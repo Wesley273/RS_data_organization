@@ -12,7 +12,7 @@ def test_arc_query(radius: str, full: bool):
     for i in range(0, 100):
         start = time.time()
         result = my_system.arc_query("2021-03-01", "test-large", rand_lon, rand_lat, radius, full)
-        # my_system.print_result(result)
+        my_system.print_result(result)
         end = time.time()
         total = len(result)
         cost_list[i] = (end-start)*1000
@@ -34,8 +34,9 @@ if __name__ == "__main__":
     my_system.print_result(result)
     """
 
-    
+    '''
     result=my_system.full_text_query("2021-03-01", "2021-03-01", "test-practical", "name", "沈阳龙", "100%", full=True)
     my_system.print_result(result)
+    '''
     
     
