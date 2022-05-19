@@ -13,6 +13,9 @@ class MyElastic:
     def get_info(self):
         return(self.__client.info())
 
+    def delete_doc(self, index_name, id):
+        self.__client.delete(index_name, id)
+
     def create_index(self, index_name='test'):
         '''
         Create an index and its mapping
@@ -164,5 +167,5 @@ class MyElastic:
             res = self.__client.scroll(scroll_id=scroll_id, scroll='5m')  # scroll参数必须指定否则会报错
             mdata += res["hits"]["hits"]
             # print(res)
-        #print(len(mdata))
+        # print(len(mdata))
         return mdata

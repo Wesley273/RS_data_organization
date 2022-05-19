@@ -45,6 +45,10 @@ class MySystem:
         else:
             return es_result
 
+    def delete_row(self, rowkey: str, index_name: str):
+        self.__es.delete_doc(index_name, rowkey)
+        self.__hbase.delete_row(index_name, rowkey)
+
     def get_row(self, rowkey: str, index_name: str):
         result = {}
         location = {}
