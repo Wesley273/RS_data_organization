@@ -1,6 +1,6 @@
 import happybase
 
-# remenber to run'hbase thrift -p 9090 start' in cmd and the port can be changed
+# remember to run'hbase thrift -p 9090 start' in cmd and the port can be changed
 
 
 class MyHBase:
